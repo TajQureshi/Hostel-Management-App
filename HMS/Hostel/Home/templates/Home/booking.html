@@ -1,0 +1,157 @@
+{% extends 'Home/base.html' %}
+{% load static %}
+
+
+{% block title %} Booking {% endblock %}
+
+{% block Header %}
+    <nav class="navbar navbar-expand-lg bg-body-tertiary py-3 rounded-bottom">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><b>HMA</b></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/">Home</a>
+                </li>
+                <li class="nav-item bg-secondary border rounded">
+                    <a class="nav-link active" aria-current="page" href="/booking">Bookings</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Contact Us</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      Account
+                    </a>
+                    {% if request.user.is_authenticated %}
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/account">My Bookings</a></li>
+                        <li><a class="dropdown-item" href="/signout">Signout {{ request.user.first_name }}</a></li>
+                    </ul>
+                    {% else %}
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="/signup">Signup</a></li>
+                        <li><a class="dropdown-item" href="/signin">Signin</a></li>
+                    </ul>
+                    {% endif %}
+                </li>
+                
+            </ul>
+            <form class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            </div>
+        </div>
+    </nav>
+    <!-- Headers End -->
+{% endblock Header %}
+
+{% block content %}
+    <!-- Main Content Start -->
+    <div class="container-fluid main">
+        <h1 class="text-center mt-3 mb-3 text-success"><b>Hostel Management Application</b></h1>
+        <br>
+
+        <form action="" method="post"> {% csrf_token %}       
+            <div class="row">
+                <!-- <div class="col-3"></div> -->
+                <div class="col-3">
+                    <h3 class="text-center">Available Beds</h3>
+                    <div class="text-center">
+                        {% for x in bd %}
+                        <div class="m-2">
+                            {% if x.status == False %}
+                                <button type="button" class="btn btn-success" title="Available">{{ x.bed_no }}</button>
+                            {% else %}
+                                <button type="button" class="btn btn-danger"  title="Booked">{{ x.bed_no }}</button>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-1"></div>
+                <div class="border border-success col-6 p-3">
+                    <h3 class="text-center text-success">Booking Bed</h3> <br>
+
+                    {% if messages %}
+                        <ul class="messages">
+                            {% for message in messages %}
+                            <li{% if message.success %} class="{{ message.success }} text-success"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    
+                    <div class="form-row mb-2">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="fname">First Name</label>
+                                <input type="text" class="form-control border border-success" id="fname" name="fname" placeholder="{{ request.user.first_name }}" disabled>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="lname">Last Name</label>
+                                <input type="text" class="form-control border border-success" id="lname" name="lname" placeholder="{{ request.user.last_name }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-2">
+                        <label for="bed">Select Bed</label>
+                        <select class="form-select border border-success" name="bed" aria-label="Default select example" required>
+                            <option value="" selected disabled>Bed</option>
+                            {% for x in beds %}
+                            <option value="{{ x.id }}">{{ x.bed_no }}</option>
+                            {% endfor %}
+                            
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <label for="date">Date</label>
+                        <input type="date" class="form-control border border-success" name="date" id="date">
+                    </div> <br>
+
+                    <!-- <div class="form-row mb-2">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="fname">First Name</label>
+                                <input type="text" class="form-control border border-success" id="fname" name="fname" placeholder="First Name" required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="lname">Last Name</label>
+                                <input type="text" class="form-control border border-success" id="lname" name="lname" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="form-group mb-2">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control border border-success" id="inputEmail4" name="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label for="username">Username</label>
+                                <input type="text" class="form-control border border-success" id="username" name="username" placeholder="Username", required>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="inputPassword4">Password</label>
+                                <input type="password" class="form-control border border-success" id="inputPassword4" name="password" placeholder="Password" required>
+                            </div>
+                       </div>
+                    </div><br>  -->
+
+                    <div class="text-center">
+                        <button type="submit" id="rzp-button1" class="btn btn-primary ">Pay & Book</button>
+                    </div>
+                </div>
+                <!-- <div class="col-3"></div>                 -->
+            </div>
+        </form>        
+    </div>
+
+
+{% endblock content %}
+
